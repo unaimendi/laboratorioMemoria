@@ -1,86 +1,75 @@
-type Especialidad = "Medico de familia" | "Pediatra" | "Cardiólogo";
-
-export interface Pacientes {
-	id: number;
-	nombre: string;
-	apellidos: string;
-	sexo: string;
-	temperatura: number;
-	frecuenciaCardiaca: number;
-	especialidad: Especialidad;
-	edad: number;
+export interface Carta {
+	imgId: number;
+	imgUrl: string;
+	estaVuelta: boolean;
+	encontrada: boolean;
 }
 
-export const pacientes: Pacientes[] = [
+interface InfoCarta {
+	imgId: number;
+	imgUrl: string;
+}
+
+const BASE_URL = "/src/img/";
+const infoCartas: InfoCarta[] = [
 	{
-		id: 1,
-		nombre: "John",
-		apellidos: "Doe",
-		sexo: "Male",
-		temperatura: 36.8,
-		frecuenciaCardiaca: 80,
-		especialidad: "Medico de familia",
-		edad: 44,
+		imgId: 1,
+		imgUrl: `${BASE_URL}1.png`,
 	},
 	{
-		id: 2,
-		nombre: "Jane",
-		apellidos: "Doe",
-		sexo: "Female",
-		temperatura: 36.8,
-		frecuenciaCardiaca: 70,
-		especialidad: "Medico de familia",
-		edad: 43,
+		imgId: 2,
+		imgUrl: `${BASE_URL}2.png`,
 	},
 	{
-		id: 3,
-		nombre: "Junior",
-		apellidos: "Doe",
-		sexo: "Male",
-		temperatura: 36.8,
-		frecuenciaCardiaca: 90,
-		especialidad: "Pediatra",
-		edad: 8,
+		imgId: 3,
+		imgUrl: `${BASE_URL}3.png`,
 	},
 	{
-		id: 4,
-		nombre: "Mary",
-		apellidos: "Wien",
-		sexo: "Female",
-		temperatura: 36.8,
-		frecuenciaCardiaca: 120,
-		especialidad: "Medico de familia",
-		edad: 20,
+		imgId: 4,
+		imgUrl: `${BASE_URL}4.png`,
 	},
 	{
-		id: 5,
-		nombre: "Scarlett",
-		apellidos: "Somez",
-		sexo: "Female",
-		temperatura: 36.8,
-		frecuenciaCardiaca: 110,
-		especialidad: "Cardiólogo",
-		edad: 30,
+		imgId: 5,
+		imgUrl: `${BASE_URL}5.png`,
 	},
 	{
-		id: 6,
-		nombre: "Brian",
-		apellidos: "Kid",
-		sexo: "Male",
-		temperatura: 39.8,
-		frecuenciaCardiaca: 80,
-		especialidad: "Pediatra",
-		edad: 11,
+		imgId: 6,
+		imgUrl: `${BASE_URL}6.png`,
 	},
 ];
 
-export interface NumeroPacientesPorEspecialidad {
-	medicoDeFamilia: number;
-	pediatria: number;
-	cardiologia: number;
-}
-export const numeroPacientesPorEspecialidad: NumeroPacientesPorEspecialidad = {
-	medicoDeFamilia: 0,
-	pediatria: 0,
-	cardiologia: 0,
+const crearCartaInicial = (imgId: number, imgUrl: string): Carta => ({
+	imgId,
+	imgUrl,
+	estaVuelta: false,
+	encontrada: false,
+});
+
+const crearColeccionDeCartasInicial = (infoCartas: InfoCarta[]): Carta[] => {
+	let cartas: Carta[] = [];
+	infoCartas.forEach((carta: InfoCarta) => {
+		cartas.push(crearCartaInicial(carta.imgId, carta.imgUrl));
+		cartas.push(crearCartaInicial(carta.imgId, carta.imgUrl));
+	});
+	return cartas;
 };
+
+export let cartas: Carta[] = crearColeccionDeCartasInicial(infoCartas);
+
+type EstadoPartida = "PartidaNoIniciada" | "CeroCartasLevantadas" | "UnaCartaLevantada" | "DosCartasLevantadas" | "PartidaCompleta";
+
+export interface Tablero {
+	cartas: Carta[];
+	estadoPartida: EstadoPartida;
+	indiceCartaVolteadaA?: number;
+	indiceCartaVolteadaB?: number;
+	intentos: number;
+}
+
+const crearTableroInicial = (): Tablero => ({
+	cartas: cartas,
+	estadoPartida: "PartidaNoIniciada",
+	intentos: 0,
+});
+
+export let tablero: Tablero = crearTableroInicial();

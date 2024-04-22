@@ -1,8 +1,10 @@
-import { obtenPacientesAsignadosAPediatria, obtenPacientesAsignadosAPediatriaYMenorDeDiezAnios, activarProtocoloUrgencia, reasignaPacientesAMedicoFamilia, HayPacientesDePediatria, cuentaPacientesPorEspecialidad } from "./motor";
+// import {  } from "./motor";
 
-console.log(obtenPacientesAsignadosAPediatria);
-console.log(obtenPacientesAsignadosAPediatriaYMenorDeDiezAnios);
-console.log(activarProtocoloUrgencia);
-console.log(reasignaPacientesAMedicoFamilia);
-console.log(HayPacientesDePediatria);
-console.log(cuentaPacientesPorEspecialidad());
+// import { shuffle } from "./motor";
+import { inicializa } from "./ui";
+// import { tablero } from "./modelo";
+// console.log(tablero);
+
+// shuffle();
+
+document.addEventListener("DOMContentLoaded", inicializa);
