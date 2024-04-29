@@ -4,36 +4,43 @@ import { esPartidaCompleta, iniciaPartida, parejaEncontrada, parejaNoEncontrada,
 export const inicializa = () => {
 	const app = document.getElementById("app");
 
-	const voltearCartaUI = (carta: HTMLButtonElement) => {
+	const handleClickCarta = (carta: HTMLButtonElement) => {
 		const idCarta = carta.getAttribute("data-id");
 		if (idCarta) {
 			if (sePuedeVoltearLaCarta(tablero, parseInt(idCarta))) {
-				voltearLaCarta(tablero, parseInt(idCarta));
-				carta.classList.add("volteada");
-				if (tablero.estadoPartida === "DosCartasLevantadas") {
-					tablero.intentos++;
-					pintaIntentos();
-					let idCartaA = tablero.indiceCartaVolteadaA;
-					let idCartaB = tablero.indiceCartaVolteadaB;
-
-					if (idCartaA !== undefined && idCartaB !== undefined) {
-						let sonIguales = sonPareja(idCartaA, idCartaB, tablero);
-						if (sonIguales) {
-							parejaEncontrada(idCartaA, idCartaB, tablero);
-							if (esPartidaCompleta(tablero)) mostrarPantallaFinal();
-						} else {
-							parejaNoEncontrada(idCartaA, idCartaB, tablero);
-							setTimeout(() => {
-								const cartaA = document.getElementById(`carta_${idCartaA}`);
-								const cartaB = document.getElementById(`carta_${idCartaB}`);
-								cartaA?.classList.remove("volteada");
-								cartaB?.classList.remove("volteada");
-							}, 1000);
-						}
-					}
-				}
+				voltearCartaUI(carta, idCarta);
 			} else {
 				crearFeedback("Esa carta ya está volteada");
+			}
+		}
+	};
+
+	const voltearCartaUI = (carta: HTMLButtonElement, idCarta: string) => {
+		voltearLaCarta(tablero, parseInt(idCarta));
+		carta.classList.add("volteada");
+		if (tablero.estadoPartida === "DosCartasLevantadas") {
+			pintaIntentos();
+			comparaCartas();
+		}
+	};
+
+	const comparaCartas = () => {
+		let idCartaA = tablero.indiceCartaVolteadaA;
+		let idCartaB = tablero.indiceCartaVolteadaB;
+
+		if (idCartaA !== undefined && idCartaB !== undefined) {
+			let sonIguales = sonPareja(idCartaA, idCartaB, tablero);
+			if (sonIguales) {
+				parejaEncontrada(idCartaA, idCartaB, tablero);
+				if (esPartidaCompleta(tablero)) mostrarPantallaFinal();
+			} else {
+				parejaNoEncontrada(idCartaA, idCartaB, tablero);
+				setTimeout(() => {
+					const cartaA = document.getElementById(`carta_${idCartaA}`);
+					const cartaB = document.getElementById(`carta_${idCartaB}`);
+					cartaA?.classList.remove("volteada");
+					cartaB?.classList.remove("volteada");
+				}, 1000);
 			}
 		}
 	};
@@ -73,7 +80,7 @@ export const inicializa = () => {
 			main.appendChild(elementoCarta);
 
 			elementoCarta.addEventListener("click", () => {
-				voltearCartaUI(elementoCarta);
+				handleClickCarta(elementoCarta);
 			});
 		});
 	};
@@ -168,7 +175,7 @@ export const inicializa = () => {
 	};
 
 	const reiniciarPartida = () => {
-		iniciaPartida(tablero);
+		// iniciaPartida(tablero);
 		const secTablero = document.getElementById("secTablero");
 		secTablero?.remove();
 		const intentosText = document.getElementById("intentosText");

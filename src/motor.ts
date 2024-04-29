@@ -1,4 +1,4 @@
-import { Carta, Tablero } from "./modelo";
+import { Carta, Tablero, crearColeccionDeCartasInicial, infoCartas } from "./modelo";
 
 /*
 En el motor nos va a hacer falta un método para barajar cartas
@@ -31,6 +31,7 @@ export const voltearLaCarta = (tablero: Tablero, indice: number): void => {
 			tablero.indiceCartaVolteadaA = indice;
 			break;
 		case "UnaCartaLevantada":
+			tablero.intentos++;
 			tablero.estadoPartida = "DosCartasLevantadas";
 			tablero.indiceCartaVolteadaB = indice;
 			break;
@@ -81,6 +82,8 @@ export const esPartidaCompleta = (tablero: Tablero): boolean => tablero.cartas.e
   */
 
 export const iniciaPartida = (tablero: Tablero): void => {
+	let cartas = crearColeccionDeCartasInicial(infoCartas);
+	tablero.cartas = cartas;
 	barajarCartas(tablero.cartas);
 	tablero.intentos = 0;
 	tablero.estadoPartida = "CeroCartasLevantadas";

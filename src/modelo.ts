@@ -11,7 +11,7 @@ interface InfoCarta {
 }
 
 const BASE_URL = "/src/img/";
-const infoCartas: InfoCarta[] = [
+export const infoCartas: InfoCarta[] = [
 	{
 		imgId: 1,
 		imgUrl: `${BASE_URL}1.png`,
@@ -45,7 +45,7 @@ const crearCartaInicial = (imgId: number, imgUrl: string): Carta => ({
 	encontrada: false,
 });
 
-const crearColeccionDeCartasInicial = (infoCartas: InfoCarta[]): Carta[] => {
+export const crearColeccionDeCartasInicial = (infoCartas: InfoCarta[]): Carta[] => {
 	let cartas: Carta[] = [];
 	infoCartas.forEach((carta: InfoCarta) => {
 		cartas.push(crearCartaInicial(carta.imgId, carta.imgUrl));
@@ -66,7 +66,7 @@ export interface Tablero {
 	intentos: number;
 }
 
-const crearTableroInicial = (): Tablero => ({
+export const crearTableroInicial = (): Tablero => ({
 	cartas: cartas,
 	estadoPartida: "PartidaNoIniciada",
 	intentos: 0,
