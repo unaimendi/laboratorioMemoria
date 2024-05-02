@@ -1,5 +1,5 @@
 import { tablero } from "./modelo";
-import { esPartidaCompleta, iniciaPartida, parejaEncontrada, parejaNoEncontrada, sePuedeVoltearLaCarta, sonPareja, voltearLaCarta } from "./motor";
+import { esPartidaCompleta, iniciaPartida, parejaEncontrada, parejaNoEncontrada, resetEstado, sePuedeVoltearLaCarta, sonPareja, voltearLaCarta } from "./motor";
 
 export const inicializa = () => {
 	const app = document.getElementById("app");
@@ -16,11 +16,23 @@ export const inicializa = () => {
 	};
 
 	const voltearCartaUI = (carta: HTMLButtonElement, idCarta: string) => {
-		voltearLaCarta(tablero, parseInt(idCarta));
-		carta.classList.add("volteada");
-		if (tablero.estadoPartida === "DosCartasLevantadas") {
-			pintaIntentos();
-			comparaCartas();
+		switch (tablero.estadoPartida) {
+			case "CeroCartasLevantadas":
+				voltearLaCarta(tablero, parseInt(idCarta));
+				carta.classList.add("volteada");
+				break;
+			case "UnaCartaLevantada":
+				voltearLaCarta(tablero, parseInt(idCarta));
+				carta.classList.add("volteada");
+				pintaIntentos();
+				comparaCartas();
+				break;
+			case "DosCartasLevantadas":
+				crearFeedback("Puede haber un maximo de dos cartas volteadas");
+				carta.blur();
+				break;
+			default:
+				break;
 		}
 	};
 
@@ -36,6 +48,7 @@ export const inicializa = () => {
 			} else {
 				parejaNoEncontrada(idCartaA, idCartaB, tablero);
 				setTimeout(() => {
+					resetEstado(tablero);
 					const cartaA = document.getElementById(`carta_${idCartaA}`);
 					const cartaB = document.getElementById(`carta_${idCartaB}`);
 					cartaA?.classList.remove("volteada");

@@ -24,17 +24,19 @@ export const sePuedeVoltearLaCarta = (tablero: Tablero, indice: number): boolean
 };
 
 export const voltearLaCarta = (tablero: Tablero, indice: number): void => {
-	tablero.cartas[indice].estaVuelta = true;
 	switch (tablero.estadoPartida) {
 		case "CeroCartasLevantadas":
 			tablero.estadoPartida = "UnaCartaLevantada";
 			tablero.indiceCartaVolteadaA = indice;
+			tablero.cartas[indice].estaVuelta = true;
 			break;
 		case "UnaCartaLevantada":
 			tablero.intentos++;
 			tablero.estadoPartida = "DosCartasLevantadas";
 			tablero.indiceCartaVolteadaB = indice;
+			tablero.cartas[indice].estaVuelta = true;
 			break;
+
 		default:
 			break;
 	}
@@ -55,19 +57,25 @@ export const parejaEncontrada = (indiceA: number, indiceB: number, tablero: Tabl
 	tablero.cartas[indiceB].encontrada = true;
 	tablero.cartas[indiceA].estaVuelta = true;
 	tablero.cartas[indiceB].estaVuelta = true;
-	tablero.indiceCartaVolteadaA = undefined;
-	tablero.indiceCartaVolteadaB = undefined;
-	tablero.estadoPartida = "CeroCartasLevantadas";
+	undefineCartasVolteadas(tablero);
+	resetEstado(tablero);
 	if (esPartidaCompleta(tablero)) tablero.estadoPartida = "PartidaCompleta";
 };
 
 /*
-	Aquí asumimos que no son pareja y las volvemos a poner boca abajo
-  */
+Aquí asumimos que no son pareja y las volvemos a poner boca abajo
+*/
 export const parejaNoEncontrada = (indiceA: number, indiceB: number, tablero: Tablero): void => {
 	tablero.cartas[indiceA].estaVuelta = false;
 	tablero.cartas[indiceB].estaVuelta = false;
+	undefineCartasVolteadas(tablero);
+};
+
+export const resetEstado = (tablero: Tablero): void => {
 	tablero.estadoPartida = "CeroCartasLevantadas";
+};
+
+const undefineCartasVolteadas = (tablero: Tablero): void => {
 	tablero.indiceCartaVolteadaA = undefined;
 	tablero.indiceCartaVolteadaB = undefined;
 };
