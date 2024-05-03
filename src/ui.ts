@@ -1,5 +1,5 @@
 import { tablero } from "./modelo";
-import { esPartidaCompleta, iniciaPartida, parejaEncontrada, parejaNoEncontrada, resetEstado, sePuedeVoltearLaCarta, sonPareja, voltearLaCarta } from "./motor";
+import { esPartidaCompleta, generarMensajeFeedback, iniciaPartida, parejaEncontrada, parejaNoEncontrada, resetEstado, sePuedeVoltearLaCarta, sonPareja, voltearLaCarta } from "./motor";
 
 export const inicializa = () => {
 	const app = document.getElementById("app");
@@ -10,29 +10,19 @@ export const inicializa = () => {
 			if (sePuedeVoltearLaCarta(tablero, parseInt(idCarta))) {
 				voltearCartaUI(carta, idCarta);
 			} else {
-				crearFeedback("Esa carta ya está volteada");
+				const mensajeFeedback = generarMensajeFeedback(tablero, parseInt(idCarta));
+				crearFeedback(mensajeFeedback);
+				carta.blur();
 			}
 		}
 	};
 
 	const voltearCartaUI = (carta: HTMLButtonElement, idCarta: string) => {
-		switch (tablero.estadoPartida) {
-			case "CeroCartasLevantadas":
-				voltearLaCarta(tablero, parseInt(idCarta));
-				carta.classList.add("volteada");
-				break;
-			case "UnaCartaLevantada":
-				voltearLaCarta(tablero, parseInt(idCarta));
-				carta.classList.add("volteada");
-				pintaIntentos();
-				comparaCartas();
-				break;
-			case "DosCartasLevantadas":
-				crearFeedback("Puede haber un maximo de dos cartas volteadas");
-				carta.blur();
-				break;
-			default:
-				break;
+		voltearLaCarta(tablero, parseInt(idCarta));
+		carta.classList.add("volteada");
+		if (tablero.estadoPartida === "DosCartasLevantadas") {
+			pintaIntentos();
+			comparaCartas();
 		}
 	};
 

@@ -1,4 +1,4 @@
-import { Carta, Tablero, crearColeccionDeCartasInicial, infoCartas } from "./modelo";
+import { Carta, MensajeFeedback, Tablero, crearColeccionDeCartasInicial, infoCartas } from "./modelo";
 
 /*
 En el motor nos va a hacer falta un método para barajar cartas
@@ -20,7 +20,17 @@ const barajarCartas = (cartas: Carta[]): Carta[] => {
 	Una carta se puede voltear si no está encontrada y no está ya volteada, o no hay dos cartas ya volteadas
   */
 export const sePuedeVoltearLaCarta = (tablero: Tablero, indice: number): boolean => {
-	return !tablero.cartas[indice].estaVuelta && !tablero.cartas[indice].encontrada ? true : false;
+	return !tablero.cartas[indice].estaVuelta && !tablero.cartas[indice].encontrada && tablero.estadoPartida !== "DosCartasLevantadas" ? true : false;
+};
+
+export const generarMensajeFeedback = (tablero: Tablero, indice: number): MensajeFeedback => {
+	if (tablero.cartas[indice].estaVuelta && tablero.cartas[indice].encontrada) {
+		return "Esa carta ya está volteada";
+	}
+	if (tablero.estadoPartida === "DosCartasLevantadas") {
+		return "Puede haber un maximo de dos cartas volteadas";
+	}
+	return "";
 };
 
 export const voltearLaCarta = (tablero: Tablero, indice: number): void => {

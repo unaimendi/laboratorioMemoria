@@ -73,3 +73,5 @@ export const crearTableroInicial = (): Tablero => ({
 });
 
 export let tablero: Tablero = crearTableroInicial();
+
+export type MensajeFeedback = "Esa carta ya está volteada" | "Puede haber un maximo de dos cartas volteadas" | "";
